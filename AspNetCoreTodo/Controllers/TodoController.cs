@@ -34,14 +34,10 @@ namespace AspNetCoreTodo.Controllers
     {
       if (!ModelState.IsValid)
       {
-        return RedirectToAction("Index");
+        return BadRequest(ModelState);
       }
-      var successful = await _todoItemService.AddItemAsync(newItem);
-
-      if (!successful)
-      {
-        return BadRequest("Could not add item.");
-      }
+      await _todoItemService.AddItemAsync(newItem);
+      
       return RedirectToAction("Index");
     }
 
@@ -50,15 +46,11 @@ namespace AspNetCoreTodo.Controllers
     {
       if (id == Guid.Empty)
       {
-        return RedirectToAction("Index");
+        return BadRequest(ModelState);
       }
 
-      var successful = await _todoItemService.MarkDoneAsync(id);
+      await _todoItemService.MarkDoneAsync(id);
 
-      if (!successful)
-      {
-        return BadRequest("Could not mark item as done.");
-      }
       return RedirectToAction("Index");
     }
   }
